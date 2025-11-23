@@ -14,7 +14,7 @@ public class ApiGatewayConfig {
                 .route("home", r -> r.path("/home")
                         .filters(f -> f.rewritePath("/home", "/api/races")
                                 .addRequestHeader("x-api-key", "validKey123"))
-                        .uri("http://localhost:8083"))
+                        .uri("lb://races"))
                 .build();
     }
 }
