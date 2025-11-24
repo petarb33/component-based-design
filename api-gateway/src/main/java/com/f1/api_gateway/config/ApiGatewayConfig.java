@@ -15,6 +15,15 @@ public class ApiGatewayConfig {
                         .filters(f -> f.rewritePath("/home", "/api/races")
                                 .addRequestHeader("x-api-key", "validKey123"))
                         .uri("lb://races"))
+                        //.uri("http://localhost:8083"))
+                .route("login", r -> r.path("/login")
+                        .filters(f -> f.rewritePath("/login", "/api/login")
+                                .addRequestHeader("x-api-key", "validKey123"))
+                        .uri("http://localhost:8080"))
+                .route("signup", r -> r.path("/signup")
+                        .filters(f -> f.rewritePath("/signup", "/api/signup")
+                                .addRequestHeader("x-api-key", "validKey123"))
+                        .uri("http://localhost:8080"))
                 .build();
     }
 }

@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 public class AuthenticationFilter {
 
     public Mono<Void> filter(ServerWebExchange serverWebExchange, GatewayFilterChain gatewayFilterChain) {
-        String apiKey = serverWebExchange.getRequest().getQueryParams().getFirst("x-api-key");
+        String apiKey = serverWebExchange.getRequest().getHeaders().getFirst("x-api-key");
 
         if (apiKey == null || !apiKey.equals("validKey123")) {
             serverWebExchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);

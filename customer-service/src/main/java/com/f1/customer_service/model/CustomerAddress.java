@@ -1,6 +1,7 @@
 package com.f1.customer_service.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -28,12 +29,12 @@ public class CustomerAddress {
     private String type;
 
     @Size(max = 255)
-    @NotNull
+    @NotBlank
     @Column(name = "street", nullable = false)
     private String street;
 
     @Size(max = 100)
-    @NotNull
+    @NotBlank
     @Column(name = "city", nullable = false, length = 100)
     private String city;
 
@@ -42,7 +43,7 @@ public class CustomerAddress {
     private String postalCode;
 
     @Size(max = 100)
-    @NotNull
+    @NotBlank
     @Column(name = "country", nullable = false, length = 100)
     private String country;
 

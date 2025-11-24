@@ -21,11 +21,8 @@ public class Order {
     private Integer id;
 
     @NotNull
-    //@ManyToOne(optional = false)
-    //@JoinColumn(name = "customer_id", nullable = false)
     @Column(name = "customer_id")
     @JsonProperty("customer_id")
-    //@JsonIgnore
     private Integer customerId;
 
     @NotNull

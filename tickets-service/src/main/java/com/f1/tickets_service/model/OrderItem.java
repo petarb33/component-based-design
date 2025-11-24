@@ -23,14 +23,12 @@ public class OrderItem {
     @ManyToOne(optional = false)
     @JoinColumn(name = "order_id", nullable = false)
     @JsonProperty("order_id")
-    //@JsonIgnore
     private Order order;
 
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "ticket_id", nullable = false)
     @JsonProperty("ticket_id")
-    //@JsonIgnore
     private Ticket ticket;
 
     @NotNull

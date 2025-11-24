@@ -1,4 +1,4 @@
-package com.f1.races_service.dto;
+package com.f1.tickets_service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Data
 public class RaceDTO {
     private Integer id;
+
     @NotBlank(message = "Name is required")
     private String name;
 
@@ -25,8 +26,7 @@ public class RaceDTO {
     private Integer season;
 
     @NotNull(message = "Track ID is required")
-    @Min(1)
-    @JsonProperty("track_id")
-    private Integer trackId;
+    @JsonProperty("track")
+    private TrackDTO track;
 
 }

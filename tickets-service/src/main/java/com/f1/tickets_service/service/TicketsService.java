@@ -1,6 +1,6 @@
 package com.f1.tickets_service.service;
 
-import com.f1.races_service.dto.RaceDTO;
+import com.f1.tickets_service.dto.RaceDTO;
 import com.f1.tickets_service.dto.CustomerDTO;
 import com.f1.tickets_service.dto.OrderDTO;
 import com.f1.tickets_service.dto.OrderItemDTO;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,8 +45,8 @@ public class TicketsService {
         ticket.setType(dto.getType());
         ticket.setSector(dto.getSector());
         ticket.setPrice(dto.getPrice());
-        RaceDTO raceDto = racesProxy.getRaceById(dto.getRaceWeekendId());
-        ticket.setRaceWeekendId(raceDto.getId());
+        RaceDTO raceDto = racesProxy.getRaceById(dto.getRaceId());
+        ticket.setRaceId(raceDto.getId());
 
         return ticketRepository.save(ticket);
     }
@@ -64,6 +65,13 @@ public class TicketsService {
 
         ticket.setPrice(bd);
         return ticketRepository.save(ticket);
+    }
+
+    public void deleteTicket(Integer idTicket) {
+        Ticket ticket = ticketRepository.findById(idTicket)
+                .orElseThrow(() -> new EntityDoesNotExistException("Ticket with id " + idTicket + " not found"));
+
+        ticketRepository.delete(ticket);
     }
 
     public List<Order> getAllOrders() {
@@ -132,6 +140,20 @@ public class TicketsService {
     public List<Order> getOrdersFromCustomer(Integer customerId) {
         CustomerDTO customerDTO = customerProxy.getCustomer(customerId);
         return orderRepository.findAllByCustomerId(customerId);
+    }
+
+    public List<RaceDTO>  getRacesFromCustomer(Integer customerId) {
+        CustomerDTO customerDTO = customerProxy.getCustomer(customerId);
+
+        List<Integer> raceIdList = orderItemRepository.findRaceIdsByCustomerId(customerId);
+
+        List<RaceDTO> races = new ArrayList<>();
+        for(Integer raceId : raceIdList){
+            RaceDTO raceDto = racesProxy.getRaceById(raceId);
+            races.add(raceDto);
+        }
+
+        return races;
     }
 
 }

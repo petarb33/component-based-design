@@ -33,7 +33,7 @@ public class Race {
     @Column(name = "season")
     private Integer season;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "track_id")
     private Track track;
 

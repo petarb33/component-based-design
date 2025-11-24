@@ -27,6 +27,7 @@ public class RacesService {
     }
 
     public Race getRaceById(Integer id){
+        System.out.println(raceRepository.findById(id));
         return raceRepository.findById(id)
                 .orElseThrow(()->new EntityDoesNotExistException("Race with ID " + id + " does not exist"));
     }

@@ -2,6 +2,7 @@ package com.f1.tickets_service.controller;
 
 import com.f1.tickets_service.dto.OrderDTO;
 import com.f1.tickets_service.dto.OrderItemDTO;
+import com.f1.tickets_service.dto.RaceDTO;
 import com.f1.tickets_service.dto.TicketDTO;
 import com.f1.tickets_service.model.*;
 import com.f1.tickets_service.service.TicketsService;
@@ -30,9 +31,14 @@ public class TicketsController {
         return ticketsService.getAllTickets();
     }
 
-    @PostMapping("/tickets/add")
-    public ResponseEntity<Ticket> createTicket(@RequestBody TicketDTO ticketDto) {
+    @PostMapping("/tickets")
+    public ResponseEntity<Ticket> createTicket(@RequestBody @Valid TicketDTO ticketDto) {
         return new ResponseEntity<>(ticketsService.createTicket(ticketDto), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/tickets/{id}")
+    public void deleteTicket(@PathVariable @Min(1) Integer id) {
+        ticketsService.deleteTicket(id);
     }
 
     @PatchMapping("/tickets/{idTicket}/price/{price}")
@@ -50,8 +56,9 @@ public class TicketsController {
     public Order getOrderById(@PathVariable @Min(1) Integer id) {
         return ticketsService.getOrderById(id);
     }
-    @PostMapping("/orders/add")
-    public ResponseEntity<Order> createOrder(@RequestBody OrderDTO orderDto) {
+
+    @PostMapping("/orders")
+    public ResponseEntity<Order> createOrder(@RequestBody @Valid OrderDTO orderDto) {
         return new ResponseEntity<>(ticketsService.addOrder(orderDto), HttpStatus.CREATED);
     }
 
@@ -71,7 +78,7 @@ public class TicketsController {
         return ticketsService.getOrderItemById(id);
     }
 
-    @PostMapping("/orderItems/add")
+    @PostMapping("/orderItems")
     public ResponseEntity<OrderItem> createOrderItem(@RequestBody OrderItemDTO orderItemDto) {
         return new ResponseEntity<>(ticketsService.addOrderItem(orderItemDto), HttpStatus.CREATED);
     }
@@ -84,5 +91,10 @@ public class TicketsController {
     @GetMapping("/orders/customers/{customerId}")
     public List<Order> getOrdersFromCustomer(@PathVariable @Min(1) Integer customerId){
         return ticketsService.getOrdersFromCustomer(customerId);
+    }
+
+    @GetMapping("/races/customers/{customerId}")
+    public List<RaceDTO> getRaces(@PathVariable @Min(1) Integer customerId){
+        return ticketsService.getRacesFromCustomer(customerId);
     }
 }

@@ -30,11 +30,11 @@ public class RacesController {
     }
 
     @GetMapping("/races/{id}")
-    public Race getRaceById(@PathVariable Integer id){
+    public Race getRaceById(@PathVariable @Min(1) Integer id){
         return racesService.getRaceById(id);
     }
 
-    @PostMapping("/races/add")
+    @PostMapping("/races")
     public ResponseEntity<Race> addRace(@Valid @RequestBody RaceDTO race){
         return new ResponseEntity<>(racesService.addRace(race), HttpStatus.CREATED);
     }
@@ -60,7 +60,7 @@ public class RacesController {
         return racesService.getTrackById(id);
     }
 
-    @PostMapping("/tracks/add")
+    @PostMapping("/tracks")
     public ResponseEntity<Track> addTrack(@Valid @RequestBody Track track){
         return new ResponseEntity<>(racesService.addTrack(track), HttpStatus.CREATED);
     }
