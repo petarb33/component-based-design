@@ -14,6 +14,7 @@ import com.f1.tickets_service.feign.RacesProxy;
 import com.f1.tickets_service.model.*;
 import com.f1.tickets_service.repository.*;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,20 @@ public class TicketsService {
         ticket.setRaceId(raceDto.getId());
 
         return ticketRepository.save(ticket);
+    }
+
+    public Ticket getTicketById(Integer id) {
+        return ticketRepository.findById(id)
+                .orElseThrow(() -> new EntityDoesNotExistException("Ticket with id " + id + " does not exist"));
+    }
+
+    @Transactional
+    public void deleteTicketsByRaceId(Integer raceId){
+        List<Ticket> tickets = ticketRepository.findAllByRaceId(raceId);
+        for (Ticket ticket : tickets) {
+            orderItemRepository.deleteByTicketId(ticket.getId());
+        }
+        ticketRepository.deleteByRaceId(raceId);
     }
 
     public Ticket updateTicketPrice(@PathVariable @Min(1) Integer idTicket, Integer price) {

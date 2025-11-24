@@ -6,6 +6,7 @@ import com.f1.tickets_service.dto.RaceDTO;
 import com.f1.tickets_service.dto.TicketDTO;
 import com.f1.tickets_service.model.*;
 import com.f1.tickets_service.service.TicketsService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -31,9 +32,20 @@ public class TicketsController {
         return ticketsService.getAllTickets();
     }
 
+    @GetMapping("/tickets/{id}")
+    public Ticket getTicketById(@PathVariable @Min(1) Integer id) {
+        return ticketsService.getTicketById(id);
+    }
+
     @PostMapping("/tickets")
     public ResponseEntity<Ticket> createTicket(@RequestBody @Valid TicketDTO ticketDto) {
         return new ResponseEntity<>(ticketsService.createTicket(ticketDto), HttpStatus.CREATED);
+    }
+
+    @Transactional
+    @DeleteMapping("/tickets/race/{raceId}")
+    public void deleteTickets(@PathVariable @Min(1) Integer raceId) {
+        ticketsService.deleteTicketsByRaceId(raceId);
     }
 
     @DeleteMapping("/tickets/{id}")

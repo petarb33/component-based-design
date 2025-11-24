@@ -4,6 +4,7 @@ import com.f1.races_service.dto.RaceDTO;
 import com.f1.races_service.exception.EntityAlreadyExistsException;
 import com.f1.races_service.exception.EntityDoesNotExistException;
 import com.f1.races_service.exception.InvalidDateException;
+import com.f1.races_service.feign.TicketProxy;
 import com.f1.races_service.model.Race;
 import com.f1.races_service.model.Track;
 import com.f1.races_service.repository.RaceRepository;
@@ -21,6 +22,7 @@ public class RacesService {
 
     private final RaceRepository raceRepository;
     private final TrackRepository trackRepository;
+    private final TicketProxy ticketProxy;
 
     public List<Race> getAllRaces(){
         return raceRepository.findAll();
@@ -95,8 +97,10 @@ public class RacesService {
                 .orElseThrow(() -> new EntityDoesNotExistException("Track with id " + trackId + " does not exist"));
 
         List<Race> races = raceRepository.findAllByTrack(track);
+        for(Race race : races){
+            ticketProxy.deleteTickets(race.getId());
+        }
         raceRepository.deleteAll(races);
-
         trackRepository.delete(track);
     }
 

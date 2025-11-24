@@ -59,6 +59,9 @@ public class CustomerService {
     }
 
     public List<CustomerAddress> findAddressesByCustomerId(Integer customerId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new EntityDoesNotExistException("Customer with id " + customerId + " does not exist"));
+
         return customerAddressRepository.findByCustomerId(customerId);
     }
 

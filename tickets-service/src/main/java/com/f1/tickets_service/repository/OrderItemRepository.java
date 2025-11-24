@@ -4,6 +4,7 @@ import com.f1.tickets_service.model.Order;
 import com.f1.tickets_service.model.OrderItem;
 import com.f1.tickets_service.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -19,4 +20,8 @@ public interface OrderItemRepository extends JpaRepository<OrderItem,Integer> {
 
     @Query("SELECT oi.ticket.raceId FROM OrderItem oi WHERE oi.order.customerId = :customerId AND oi.order.status = 'CONFIRMED'")
     List<Integer> findRaceIdsByCustomerId(@Param("customerId") Integer customerId);
+
+    @Modifying
+    @Query("DELETE FROM OrderItem oi WHERE oi.ticket.id = :ticketId")
+    void deleteByTicketId(Integer ticketId);
 }
